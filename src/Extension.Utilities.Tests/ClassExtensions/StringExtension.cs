@@ -96,7 +96,7 @@ namespace Extension.Utilities.Tests.ClassExtensions
         [TestCase("ABiz", "ABJA")]
         public void TestIterateUpper(string input, string expetedOutput)
         {
-            Assert.AreEqual(expetedOutput, input.IterateUpper());
+            Assert.AreEqual(expetedOutput, input.IterateUpperLetter());
         }
 
         [TestCase("Z", "aa")]
@@ -107,7 +107,7 @@ namespace Extension.Utilities.Tests.ClassExtensions
         [TestCase("ABiz", "abja")]
         public void TestIterateLower(string input, string expetedOutput)
         {
-            Assert.AreEqual(expetedOutput, input.IterateLower());
+            Assert.AreEqual(expetedOutput, input.IterateLowerLetter());
         }
 
         [TestCase("AA", "Z")]
@@ -117,7 +117,7 @@ namespace Extension.Utilities.Tests.ClassExtensions
         [TestCase("ABJA", "ABIZ")]
         public void TestReverseIterateUpper(string input, string expetedOutput)
         {
-            Assert.AreEqual(expetedOutput, input.ReverseIterateUpper());
+            Assert.AreEqual(expetedOutput, input.ReverseIterateUpperLetter());
         }
 
         [TestCase("AA", "z")]
@@ -127,7 +127,23 @@ namespace Extension.Utilities.Tests.ClassExtensions
         [TestCase("ABJA", "abiz")]
         public void TestReverseIterateLower(string input, string expetedOutput)
         {
-            Assert.AreEqual(expetedOutput, input.ReverseIterateLower());
+            Assert.AreEqual(expetedOutput, input.ReverseIterateLowerLetter());
+        }
+
+        [TestCase("HalloA", "HalloB")]
+        [TestCase("Test2AZ", "Test2BA")]
+        [TestCase("Test2aZ", "Test2aAA")]
+        public void TestIterateUpperLetterTail(string input, string expectedOutput)
+        {
+            Assert.AreEqual(expectedOutput, input.IterateUpperLetterTail());
+        }
+
+        [TestCase("HallOa", "HallOb")]
+        [TestCase("Test2az", "Test2ba")]
+        [TestCase("Test2Az", "Test2Aaa")]
+        public void TestIterateLowerLetterTail(string input, string expectedOutput)
+        {
+            Assert.AreEqual(expectedOutput, input.IterateLowerLetterTail());
         }
     }
 

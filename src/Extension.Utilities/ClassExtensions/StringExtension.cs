@@ -196,15 +196,7 @@ namespace Extension.Utilities.ClassExtensions
             var lastChar = instance.Last();
             if (char.IsNumber(lastChar))
             {
-                var nextNumeric = leftOver.GetNumericTail();
-                if (nextNumeric != string.Empty)
-                {
-                    return nextNumeric + lastChar;
-                }
-                else
-                {
-                    return lastChar.ToString();
-                }
+                return leftOver.GetNumericTail() + lastChar;
             }
             else
             {
@@ -232,6 +224,78 @@ namespace Extension.Utilities.ClassExtensions
         }
 
         /// <summary>
+        /// Get a substring from the end of the string which only consist of upper case letters
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <returns></returns>
+        public static string GetUpperLetterTail(this string instance)
+        {
+            if (string.IsNullOrEmpty(instance))
+            {
+                return string.Empty;
+            }
+
+            var leftOver = instance.Remove(instance.Length - 1);
+            var lastChar = instance.Last();
+            if (char.IsLetter(lastChar) && !char.IsLower(lastChar)) 
+            {
+                return leftOver.GetUpperLetterTail() + lastChar;
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// Get a substring from the end of the string which only consist of lower case letters
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <returns></returns>
+        public static string GetLowerLetterTail(this string instance)
+        {
+            if (string.IsNullOrEmpty(instance))
+            {
+                return string.Empty;
+            }
+
+            var leftOver = instance.Remove(instance.Length - 1);
+            var lastChar = instance.Last();
+            if (char.IsLetter(lastChar) && char.IsLower(lastChar))
+            {
+                return leftOver.GetLowerLetterTail() + lastChar;
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// Iterates the upper letter tail of the current string
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <returns></returns>
+        public static string IterateUpperLetterTail(this string instance)
+        {
+            var tail = instance.GetUpperLetterTail();
+            var body = instance.Remove(instance.Length - tail.Length);
+            return body + tail.IterateUpperLetter();
+        }
+
+        /// <summary>
+        /// Iterates the upper letter tail of the current string
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <returns></returns>
+        public static string IterateLowerLetterTail(this string instance)
+        {
+            var tail = instance.GetLowerLetterTail();
+            var body = instance.Remove(instance.Length - tail.Length);
+            return body + tail.IterateLowerLetter();
+        }
+
+        /// <summary>
         /// Iterates the string like a numeric value
         /// AA -> AB
         /// BCD -> BCE
@@ -239,11 +303,11 @@ namespace Extension.Utilities.ClassExtensions
         /// </summary>
         /// <param name="instance"></param>
         /// <returns></returns>
-        public static string IterateUpper(this string instance)
+        public static string IterateUpperLetter(this string instance)
         {
             instance = instance.ToUpper();
             var constantPart = instance.Remove(instance.Length - 1);
-            var iterated = instance.GetIteratedLastCharUpper();
+            var iterated = instance.GetIteratedLastLetterUpper();
             if (iterated == default)
             {
                 if (constantPart.Length == 0)
@@ -252,7 +316,7 @@ namespace Extension.Utilities.ClassExtensions
                 }
                 else
                 {
-                    return constantPart.IterateUpper() + "A";
+                    return constantPart.IterateUpperLetter() + "A";
                 }
             }
             else
@@ -269,11 +333,11 @@ namespace Extension.Utilities.ClassExtensions
         /// </summary>
         /// <param name="instance"></param>
         /// <returns></returns>
-        public static string ReverseIterateUpper(this string instance)
+        public static string ReverseIterateUpperLetter(this string instance)
         {
             instance = instance.ToUpper();
             var constantPart = instance.Remove(instance.Length - 1);
-            var reverseIterated = instance.GetReverseIteratedLastCharUpper();
+            var reverseIterated = instance.GetReverseIteratedLastLetterUpper();
             if (reverseIterated == default)
             {
                 if (constantPart.Length == 0)
@@ -282,7 +346,7 @@ namespace Extension.Utilities.ClassExtensions
                 }
                 else
                 {
-                    return constantPart.ReverseIterateUpper() + "Z";
+                    return constantPart.ReverseIterateUpperLetter() + "Z";
                 }
             }
             else
@@ -299,11 +363,11 @@ namespace Extension.Utilities.ClassExtensions
         /// </summary>
         /// <param name="instance"></param>
         /// <returns></returns>
-        public static string IterateLower(this string instance)
+        public static string IterateLowerLetter(this string instance)
         {
             instance = instance.ToLower();
             var constantPart = instance.Remove(instance.Length - 1);
-            var iterated = instance.GetIteratedLastCharLower();
+            var iterated = instance.GetIteratedLastLetterLower();
             if (iterated == default)
             {
                 if (constantPart.Length == 0)
@@ -312,7 +376,7 @@ namespace Extension.Utilities.ClassExtensions
                 }
                 else
                 {
-                    return constantPart.IterateLower() + "a";
+                    return constantPart.IterateLowerLetter() + "a";
                 }
             }
             else
@@ -329,11 +393,11 @@ namespace Extension.Utilities.ClassExtensions
         /// </summary>
         /// <param name="instance"></param>
         /// <returns></returns>
-        public static string ReverseIterateLower(this string instance)
+        public static string ReverseIterateLowerLetter(this string instance)
         {
             instance = instance.ToLower();
             var constantPart = instance.Remove(instance.Length - 1);
-            var reverseIterated = instance.GetReverseIteratedLastCharLower();
+            var reverseIterated = instance.GetReverseIteratedLastLetterLower();
             if (reverseIterated == default)
             {
                 if (constantPart.Length == 0)
@@ -342,7 +406,7 @@ namespace Extension.Utilities.ClassExtensions
                 }
                 else
                 {
-                    return constantPart.ReverseIterateLower() + "z";
+                    return constantPart.ReverseIterateLowerLetter() + "z";
                 }
             }
             else
@@ -359,7 +423,7 @@ namespace Extension.Utilities.ClassExtensions
         /// bgdz -> default
         /// </summary>
         /// <returns></returns>
-        public static char GetIteratedLastCharUpper(this string instance)
+        public static char GetIteratedLastLetterUpper(this string instance)
         {
             var last = instance.ToUpper().LastOrDefault();
             if (last == default || last == 'Z')
@@ -381,7 +445,7 @@ namespace Extension.Utilities.ClassExtensions
         /// bgda -> default
         /// </summary>
         /// <returns></returns>
-        public static char GetReverseIteratedLastCharUpper(this string instance)
+        public static char GetReverseIteratedLastLetterUpper(this string instance)
         {
             var last = instance.ToUpper().LastOrDefault();
             if (last == default || last == 'A')
@@ -403,7 +467,7 @@ namespace Extension.Utilities.ClassExtensions
         /// bgdz -> default
         /// </summary>
         /// <returns></returns>
-        public static char GetIteratedLastCharLower(this string instance)
+        public static char GetIteratedLastLetterLower(this string instance)
         {
             var last = instance.ToLower().LastOrDefault();
             if (last == default || last == 'z')
@@ -425,7 +489,7 @@ namespace Extension.Utilities.ClassExtensions
         /// bgda -> default
         /// </summary>
         /// <returns></returns>
-        public static char GetReverseIteratedLastCharLower(this string instance)
+        public static char GetReverseIteratedLastLetterLower(this string instance)
         {
             var last = instance.ToLower().LastOrDefault();
             if (last == default || last == 'a')
