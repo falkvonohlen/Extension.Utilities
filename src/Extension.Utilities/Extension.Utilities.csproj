@@ -1,24 +1,30 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <Authors>Falk von Ohlen</Authors>
-    <Company>Falk von Ohlen</Company>
-    <Description>Extension methods for some base .net classes which provide some utility I use regulary</Description>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <RepositoryUrl>https://github.com/Jugalio/Extension.Utilities</RepositoryUrl>
-    <RepositoryType>C#</RepositoryType>
-    <PackageReleaseNotes>Added letter iteration</PackageReleaseNotes>
-    <AssemblyVersion>1.0.2.0</AssemblyVersion>
-    <FileVersion>1.0.2.0</FileVersion>
-    <Version>1.0.2</Version>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<Authors>Falk von Ohlen</Authors>
+		<Company>Falk von Ohlen</Company>
+		<Description>Some basic utility functions which I use in multiple of my projects</Description>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<RepositoryUrl>https://github.com/Jugalio/Extension.Utilities</RepositoryUrl>
+		<RepositoryType>C#</RepositoryType>
+		<PackageReleaseNotes>Added a diagnostic process extensions class, a http client extension, a color console logger and a static serialization class for json and xml files</PackageReleaseNotes>
+		<AssemblyVersion>1.1.0.0</AssemblyVersion>
+		<FileVersion>1.1.0.0</FileVersion>
+		<Version>1.1.0</Version>
+		<LangVersion>8.0</LangVersion>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Include="..\..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\..\LICENSE">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	</ItemGroup>
 
 </Project>
