@@ -25,18 +25,7 @@ namespace Extension.Utilities.Serialization
         /// <param name="persistanceObject"></param>
         public static void SaveAsXMLFile<T>(string fileName, T persistanceObject)
         {
-            if (!fileName.EndsWith(".xml"))
-            {
-                throw new InvalidFileExtension("The filename requires the extension .xml");
-            }
-
-            var tmpPath = Path.GetTempFileName();
-            //Create a backup of the file, if it already exists
-            if (File.Exists(fileName))
-            {
-                File.Move(fileName, tmpPath);
-            }
-            try
+            SaveWrapper(".xml", fileName, () =>
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(T));
                 using (var stream = new FileStream(fileName, FileMode.Create))
@@ -52,20 +41,7 @@ namespace Extension.Utilities.Serialization
                     serializer.Serialize(xmlWriter, persistanceObject);
                     xmlWriter.Close();
                 }
-            }
-            catch (Exception ex)
-            {
-                if (File.Exists(fileName))
-                {
-                    File.Delete(fileName);
-                }
-                if (File.Exists(tmpPath))
-                {
-                    File.Move(tmpPath, fileName);
-                }
-                //Rethrow the exception
-                throw ex;
-            }
+            });
         }
 
         /// <summary>
@@ -100,18 +76,7 @@ namespace Extension.Utilities.Serialization
         /// <param name="persistanceObject"></param>
         public static void SaveAsJsonFile<T>(string fileName, T persistanceObject)
         {
-            if (!fileName.EndsWith(".xml"))
-            {
-                throw new InvalidFileExtension("The filename requires the extension .xml");
-            }
-
-            var tmpPath = Path.GetTempFileName();
-            //Create a backup of the file, if it already exists
-            if (File.Exists(fileName))
-            {
-                File.Move(fileName, tmpPath);
-            }
-            try
+            SaveWrapper(".json", fileName, () =>
             {
                 var fileContent = JsonConvert.SerializeObject(persistanceObject, Newtonsoft.Json.Formatting.Indented);
                 using (var sw = new StreamWriter(fileName))
@@ -119,20 +84,7 @@ namespace Extension.Utilities.Serialization
                     sw.Write(fileContent);
                     sw.Close();
                 }
-            }
-            catch (Exception ex)
-            {
-                if (File.Exists(fileName))
-                {
-                    File.Delete(fileName);
-                }
-                if (File.Exists(tmpPath))
-                {
-                    File.Move(tmpPath, fileName);
-                }
-                //Rethrow the exception
-                throw ex;
-            }
+            });
         }
 
         /// <summary>
@@ -161,7 +113,7 @@ namespace Extension.Utilities.Serialization
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public static void Serializer_UnknownNode(object sender, XmlNodeEventArgs e)
+        private static void Serializer_UnknownNode(object sender, XmlNodeEventArgs e)
         {
             _log?.LogWarning("Unknown Node:" + e.Name + "\t" + e.Text);
         }
@@ -171,10 +123,50 @@ namespace Extension.Utilities.Serialization
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public static void Serializer_UnknownAttribute(object sender, XmlAttributeEventArgs e)
+        private static void Serializer_UnknownAttribute(object sender, XmlAttributeEventArgs e)
         {
             XmlAttribute attr = e.Attr;
             _log?.LogWarning("Unknown attribute " + attr.Name + "='" + attr.Value + "'");
+        }
+
+        private static void SaveWrapper(string expectedExtension, string fileName, Action saveAction)
+        {
+            if (!fileName.EndsWith(expectedExtension))
+            {
+                throw new InvalidFileExtension($"The filename requires the extension {expectedExtension}");
+            }
+
+            var tmpPath = Path.GetTempFileName();
+            //Create a backup of the file, if it already exists
+            if (File.Exists(fileName))
+            {
+                File.Delete(tmpPath);
+                File.Move(fileName, tmpPath);
+            }
+            try
+            {
+                saveAction();
+            }
+            catch (Exception ex)
+            {
+                if (File.Exists(fileName))
+                {
+                    File.Delete(fileName);
+                }
+                if (File.Exists(tmpPath))
+                {
+                    File.Move(tmpPath, fileName);
+                }
+                //Rethrow the exception
+                throw ex;
+            }
+            finally
+            {
+                if (File.Exists(tmpPath))
+                {
+                    File.Delete(tmpPath);
+                }
+            }
         }
     }
 }

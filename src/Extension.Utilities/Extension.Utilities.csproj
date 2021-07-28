@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
@@ -8,10 +8,10 @@
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<RepositoryUrl>https://github.com/Jugalio/Extension.Utilities</RepositoryUrl>
 		<RepositoryType>C#</RepositoryType>
-		<PackageReleaseNotes>Added a diagnostic process extensions class, a http client extension, a color console logger and a static serialization class for json and xml files</PackageReleaseNotes>
-		<AssemblyVersion>1.1.0.0</AssemblyVersion>
-		<FileVersion>1.1.0.0</FileVersion>
-		<Version>1.1.0</Version>
+		<PackageReleaseNotes>Fixed a bug for json serialization in the common serializer</PackageReleaseNotes>
+		<AssemblyVersion>1.1.2.0</AssemblyVersion>
+		<FileVersion>1.1.2.0</FileVersion>
+		<Version>1.1.2</Version>
 		<LangVersion>8.0</LangVersion>
 	</PropertyGroup>
 
